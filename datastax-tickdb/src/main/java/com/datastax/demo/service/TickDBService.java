@@ -50,6 +50,34 @@ public class TickDBService {
 			e.printStackTrace();
 		}
 	}
+
+	
+	public TimeSeries getTimeSeries(String exchange, String symbol, DateTime fromDate, DateTime toDate) {
+		TimeSeries result = null;
+		
+		DateTime endOfMonth = fromDate;
+		
+		while (endOfMonth.isBefore(toDate)){
+			
+			if (endOfMonth.getMonthOfYear() == 12){
+				endOfMonth = endOfMonth.plusYears(1);
+			}
+			endOfMonth = endOfMonth.withTimeAtStartOfDay().withMonthOfYear(endOfMonth.plusMonths(1).getMonthOfYear()).withDayOfMonth(1);
+			
+			logger.info(endOfMonth.toDate().toString());
+			TimeSeries timeSeries;
+			if (toDate.isBefore(endOfMonth)){
+				timeSeries = getTimeSeriesByMonth(exchange, symbol, fromDate, toDate);
+			}else{
+				timeSeries = getTimeSeriesByMonth(exchange, symbol, fromDate, endOfMonth);
+				fromDate = endOfMonth;
+			}
+			
+			result = TimeSeriesUtils.mergeTimeSeries(result, timeSeries);
+		}
+			
+		return result;
+	}
 	
 	/**
 	 * Get times series data between 2 dates. If its historic it will be from the binary store 
@@ -60,8 +88,10 @@ public class TickDBService {
 	 * @param toDate
 	 * @return
 	 */
-	public TimeSeries getTimeSeries(String exchange, String symbol, DateTime fromDate, DateTime toDate) {		
+	public TimeSeries getTimeSeriesByMonth(String exchange, String symbol, DateTime fromDate, DateTime toDate) {		
 		List<DateTime> dates = DateUtils.getDatesBetween(fromDate, toDate);
+		
+		logger.info("Getting timeseries for " + fromDate.toDate() + " to " + toDate.toDate());
 		
 		Timer t = new Timer();
 		List<TimeSeries> timeSeriesDays = getTimeSeriesForDates(exchange, symbol, dates, toDate);
@@ -127,7 +157,7 @@ public class TickDBService {
 		DateTime time = new DateTime();		
 		
 		Timer t = new Timer();
-		TimeSeries result = service.getTimeSeries("NASDAQ", "AAPL", time.minusDays(5), time);
+		TimeSeries result = service.getTimeSeries("NASDAQ", "AAPL", time.minusDays(30), time);
 		logger.info(new DateTime(result.lowestDate()).toString());
 		logger.info(new DateTime(result.highestDate()).toString());		
 		t.end();		

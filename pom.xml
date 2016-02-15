@@ -7,12 +7,11 @@
 	<groupId>com.datastax</groupId>
 	<artifactId>datastax-tickdb-parent</artifactId>
 	<version>0.1-SNAPSHOT</version>
-
 		<modules>
-        <module>datastax-timeseries-lib</module>
-        <module>datastax-tickdata-comparison</module>
-				<module>datastax-tickdb</module>
-    </modules>
+        	<module>datastax-timeseries-lib</module>
+        	<module>datastax-tickdata-comparison</module>
+			<module>datastax-tickdb</module>
+    	</modules>
 	<packaging>pom</packaging>
 
 	<dependencies>

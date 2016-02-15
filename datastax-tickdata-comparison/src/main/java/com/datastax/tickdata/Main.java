@@ -66,7 +66,7 @@ public class Main {
 		
 		//Load the symbols
 		DataLoader dataLoader = new DataLoader ();
-		List<String> exchangeSymbols = dataLoader.getExchangeData();
+		List<String> exchangeSymbols = dataLoader.getExchangeData().subList(0, 10);
 		
 		logger.info("No of symbols : " + exchangeSymbols.size());
 		
@@ -89,7 +89,7 @@ public class Main {
 		timer.end();
 		
 		while(!queue.isEmpty() || !binaryQueue.isEmpty() ){
-			sleep(5);
+			//sleep(5);
 		}		
 				
 		if (binaryTotal.get() > 0){

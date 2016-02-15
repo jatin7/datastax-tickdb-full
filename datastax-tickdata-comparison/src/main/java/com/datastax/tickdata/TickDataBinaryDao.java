@@ -19,10 +19,8 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.policies.DCAwareRoundRobinPolicy;
 import com.datastax.driver.core.policies.DowngradingConsistencyRetryPolicy;
 import com.datastax.driver.core.policies.LoggingRetryPolicy;
-import com.datastax.driver.core.policies.TokenAwarePolicy;
 import com.datastax.timeseries.model.TimeSeries;
 
 public class TickDataBinaryDao {
@@ -69,7 +67,7 @@ public class TickDataBinaryDao {
 		LongArrayList dateArray = new LongArrayList(10000);
 
 		if (resultSet.isExhausted()){
-			logger.info("No results found for symbol : " + symbol);
+			logger.debug("No results found for symbol : " + symbol);
 			dateArray.trimToSize();
 			valueArray.trimToSize();
 			

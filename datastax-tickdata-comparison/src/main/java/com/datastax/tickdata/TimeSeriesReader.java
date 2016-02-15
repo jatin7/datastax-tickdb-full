@@ -9,7 +9,6 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.tickdata.TickDataDao;
 import com.datastax.timeseries.model.TimeSeries;
 
 public class TimeSeriesReader implements Future<TimeSeries> {

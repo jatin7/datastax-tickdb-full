@@ -8,7 +8,9 @@ public enum Periodicity {
 	MINUTE_5 (new Duration(5*60*1000)),
 	MINUTE_15 (new Duration(15*60*1000)),
 	MINUTE_30 (new Duration(30*60*1000)),
-	HOUR (new Duration(60*60*1000));
+	HOUR (new Duration(60*60*1000)),
+	HOUR_4 (new Duration(4*60*60*1000)),
+	DAY (new Duration(24*60*60*1000));
 	
 	Duration duration;
 	

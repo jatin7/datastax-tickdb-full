@@ -8,7 +8,6 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.tickdata.TickDataBinaryDao;
 import com.datastax.timeseries.model.TimeSeries;
 
 public class TimeSeriesBinaryReader implements Future<TimeSeries> {
