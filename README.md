@@ -37,6 +37,8 @@ The schema can be found in src/main/resources/cql/
 To specify contact points use the contactPoints command line parameter e.g. '-DcontactPoints=192.168.25.100,192.168.25.101'
 The contact points can take mulitple points in the IP,IP,IP (no spaces).
 
+To run the following commands, cd to datastax_tickdata_comparion
+
 To create the a single node cluster with replication factor of 1 for standard localhost setup, run the following
 
     mvn clean compile exec:java -Dexec.mainClass="com.datastax.demo.SchemaSetup"
@@ -52,7 +54,7 @@ To read a ticker
 	  mvn clean compile exec:java -Dexec.mainClass="com.datastax.tickdata.Read" (-Dsymbol=NASDAQ-AAPL-2015-09-16)
 
 
-Start the server by running
+Start the server by running the following from the base folder 
 
   ./run_server.sh
 
