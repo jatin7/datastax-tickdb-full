@@ -57,6 +57,7 @@ public class TickDBService {
 		
 		DateTime endOfMonth = fromDate;
 		
+		Timer timer = new Timer();
 		while (endOfMonth.isBefore(toDate)){
 			
 			if (endOfMonth.getMonthOfYear() == 12){
@@ -75,7 +76,9 @@ public class TickDBService {
 			
 			result = TimeSeriesUtils.mergeTimeSeries(result, timeSeries);
 		}
-			
+		timer.end();
+		logger.info("Request took " + timer.getTimeTakenMillis() + " over a total of " + result.getDates().length + " ticks");
+		
 		return result;
 	}
 	

@@ -37,6 +37,10 @@ The schema can be found in src/main/resources/cql/
 To specify contact points use the contactPoints command line parameter e.g. '-DcontactPoints=192.168.25.100,192.168.25.101'
 The contact points can take mulitple points in the IP,IP,IP (no spaces).
 
+First, run mvn install 
+
+Second, cd to datastax-timeseries-lib and run 'mvn install'
+
 To run the following commands, cd to datastax_tickdata_comparion
 
 To create the a single node cluster with replication factor of 1 for standard localhost setup, run the following
