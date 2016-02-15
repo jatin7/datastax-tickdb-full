@@ -95,12 +95,14 @@ For a specific symbol and date, run daily conversion of tick data to binary data
 Dates are in format - yyyyMMddHHmmss
 
 Periodicity's are
+
 MINUTE
 MINUTE_5
 MINUTE_15
 MINUTE_30
 HOUR
-
+HOUR_4
+DAY
 
 To remove the tables and the schema, run the following.
 
