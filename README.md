@@ -37,7 +37,7 @@ The schema can be found in src/main/resources/cql/
 To specify contact points use the contactPoints command line parameter e.g. '-DcontactPoints=192.168.25.100,192.168.25.101'
 The contact points can take mulitple points in the IP,IP,IP (no spaces).
 
-First, run mvn install 
+First, run mvn install -DskipTests 
 
 Second, cd to datastax-timeseries-lib and run 'mvn install'
 

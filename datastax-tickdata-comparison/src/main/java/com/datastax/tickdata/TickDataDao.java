@@ -84,7 +84,7 @@ public class TickDataDao {
 
 		while (iterator.hasNext()) {
 			Row row = iterator.next();
-			dates.add(row.getDate("date").getTime());
+			dates.add(row.getTimestamp("date").getTime());
 			values.add(row.getDouble("value"));
 		}
 
@@ -99,8 +99,8 @@ public class TickDataDao {
 		
 		BoundStatement boundStmt = new BoundStatement(this.selectRangeStmtTick);
 		boundStmt.setString(0, symbol);
-		boundStmt.setDate(1, new DateTime(startTime).toDate());
-		boundStmt.setDate(2, new DateTime(endTime).toDate());
+		boundStmt.setTimestamp(1, new DateTime(startTime).toDate());
+		boundStmt.setTimestamp(2, new DateTime(endTime).toDate());
 		
 		ResultSet resultSet = session.execute(boundStmt);		
 		Iterator<Row> iterator = resultSet.iterator();
@@ -111,7 +111,7 @@ public class TickDataDao {
 		while (iterator.hasNext()) {
 			Row row = iterator.next();
 
-			dates.add(row.getDate("date").getTime());
+			dates.add(row.getTimestamp("date").getTime());
 			values.add(row.getDouble("value"));
 		}
 
@@ -127,7 +127,7 @@ public class TickDataDao {
 		DateTime dateTime = tickData.getTime() != null ? tickData.getTime() : DateTime.now();
 		
 		boundStmt.setString(0, tickData.getKey());
-		boundStmt.setDate(1, new Timestamp(dateTime.getMillis()));
+		boundStmt.setTimestamp(1, new Timestamp(dateTime.getMillis()));
 		boundStmt.setDouble(2, tickData.getValue());
 
 		session.execute(boundStmt);
@@ -144,7 +144,7 @@ public class TickDataDao {
 			DateTime dateTime = tickData.getTime() != null ? tickData.getTime() : DateTime.now();
 						
 			boundStmt.setString(0, tickData.getKey());
-			boundStmt.setDate(1, new Date(dateTime.getMillis()));
+			boundStmt.setTimestamp(1, new Date(dateTime.getMillis()));
 			boundStmt.setDouble(2, tickData.getValue());
 
 			results.add(session.executeAsync(boundStmt));

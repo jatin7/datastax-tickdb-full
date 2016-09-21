@@ -53,7 +53,7 @@ public class TickDataBinaryDao {
 		this.insertStmtTick = session.prepare(INSERT_INTO_TICK);		
 		this.insertStmtTick.setConsistencyLevel(ConsistencyLevel.ONE);
 		this.selectStmtTick = session.prepare(SELECT_FROM_TICK);		
-		this.selectStmtTick.setConsistencyLevel(ConsistencyLevel.QUORUM);
+		this.selectStmtTick.setConsistencyLevel(ConsistencyLevel.ONE);
 	}
 	
 	public TimeSeries getTimeSeries(String symbol){
