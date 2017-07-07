@@ -10,6 +10,17 @@ CREATE TABLE if not exists tick_data (
 ); 
 truncate tick_data;
 
+create keyspace if not exists datastax_tickdata_json_demo WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+
+use datastax_tickdata_json_demo; 
+
+CREATE TABLE if not exists tick_data ( 
+	symbol text,
+	values text,
+	PRIMARY KEY (symbol)
+);	
+truncate tick_data;
+
 create keyspace if not exists datastax_tickdata_demo WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
 
 use datastax_tickdata_demo; 

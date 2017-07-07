@@ -19,39 +19,39 @@ import com.datastax.tickdata.engine.TickGenerator;
 import com.datastax.tickdata.model.TickData;
 import com.datastax.timeseries.model.TimeSeries;
 
-public class Main {
-	private static Logger logger = LoggerFactory.getLogger(Main.class);
+public class MainBinary {
+	private static Logger logger = LoggerFactory.getLogger(MainBinary.class);
 	private AtomicLong binaryTotal = new AtomicLong(0);
 	private AtomicLong tickTotal = new AtomicLong(0);
 
 	private String pattern = "#,###,###.###";
 	private DecimalFormat decimalFormat = new DecimalFormat(pattern);
 
-	public Main() {
+	public MainBinary() {
 
 		String contactPointsStr = PropertyHelper.getProperty("contactPoints", "localhost");
 		String noOfThreadsStr = PropertyHelper.getProperty("noOfThreads", "1");
 		String noOfDaysStr = PropertyHelper.getProperty("noOfDays", "2");
+
 		int noOfDays = Integer.parseInt(noOfDaysStr);
 		DateTime startTime = new DateTime().minusDays(noOfDays - 1);
 
 		logger.info("StartTime : " + startTime);
 
 		TickDataBinaryDao binaryDao = new TickDataBinaryDao(contactPointsStr.split(","));
-		TickDataDao dao = new TickDataDao(contactPointsStr.split(","));
 
 		int noOfThreads = Integer.parseInt(noOfThreadsStr);
 		// Create shared queue
-		BlockingQueue<TimeSeries> queue = new ArrayBlockingQueue<TimeSeries>(100);
+		BlockingQueue<TimeSeries> binaryQueue = new ArrayBlockingQueue<TimeSeries>(100);
 
 		// Executor for Threads
-		ExecutorService executor = Executors.newFixedThreadPool(noOfThreads);
+		ExecutorService binaryExecutor = Executors.newFixedThreadPool(noOfThreads);
 		Timer timer = new Timer();
 		timer.start();
 
 		for (int i = 0; i < noOfThreads; i++) {
 
-			executor.execute(new TimeSeriesTickWriter(dao, queue));
+			binaryExecutor.execute(new TimeSeriesWriter(binaryDao, binaryQueue));
 		}
 
 		// Load the symbols
@@ -67,20 +67,52 @@ public class Main {
 			TimeSeries next = tickGenerator.next();
 
 			try {
-				queue.put(next);
+				binaryQueue.put(next);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		timer.end();
 
-		logger.info("Data Loading (" + decimalFormat.format(tickGenerator.getCount()) + " ticks) for tick took "
-				+ tickTotal.get() + "ms ("
+		logger.info("Data Loading (" + decimalFormat.format(tickGenerator.getCount()) + " ticks) for binary took "
+				+ binaryTotal.get() + "ms ("
 				+ decimalFormat.format(
-						new Double(tickGenerator.getCount() * 1000) / (new Double(tickTotal.get()).doubleValue()))
+						new Double(tickGenerator.getCount() * 1000) / (new Double(binaryTotal.get()).doubleValue()))
 				+ " a sec)");
-
 		System.exit(0);
+	}
+
+	class TimeSeriesWriter implements Runnable {
+
+		private TickDataBinaryDao binaryDao;
+		private BlockingQueue<TimeSeries> binaryQueue;
+
+		public TimeSeriesWriter(TickDataBinaryDao binaryDao, BlockingQueue<TimeSeries> binaryQueue) {
+			logger.info("Created binary writer");
+
+			this.binaryDao = binaryDao;
+			this.binaryQueue = binaryQueue;
+		}
+
+		@Override
+		public void run() {
+			TimeSeries timeSeriesBinary;
+
+			while (true) {
+				timeSeriesBinary = binaryQueue.poll();
+
+				if (timeSeriesBinary != null) {
+					try {
+						Timer binary = new Timer();
+						this.binaryDao.insertTimeSeries(timeSeriesBinary);
+						binary.end();
+						binaryTotal.addAndGet(binary.getTimeTakenMillis());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 
 	class TimeSeriesTickWriter implements Runnable {
@@ -137,10 +169,18 @@ public class Main {
 		}
 	}
 
+	private void sleep(int seconds) {
+		try {
+			Thread.sleep(seconds * 1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new Main();
+		new MainBinary();
 	}
 }

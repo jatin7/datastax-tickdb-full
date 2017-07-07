@@ -4,6 +4,9 @@ import org.apache.commons.lang.ArrayUtils;
 
 import com.datastax.timeseries.model.TimeSeries;
 
+import cern.colt.list.DoubleArrayList;
+import cern.colt.list.LongArrayList;
+
 public class TimeSeriesUtils {
 
 	static public TimeSeries mergeTimeSeries(TimeSeries timeSeries1, TimeSeries timeSeries2) {
@@ -32,11 +35,34 @@ public class TimeSeriesUtils {
 			double[] values= ArrayUtils.addAll(timeSeries2.getValues(), timeSeries1.getValues());
 			return new TimeSeries(timeSeries1.getSymbol(), dates, values);
 		}else{
-			//TODO : Do some fancy sorting
 			return timeSeries1;
 		}		
 	}
 
+	static public TimeSeries filter(TimeSeries series, long start, long end){
+		
+		if (start < series.lowestDate() && end > series.highestDate())
+			return series;
+		
+		DoubleArrayList values = new DoubleArrayList();
+		LongArrayList dates = new LongArrayList();
+		
+		int i = 0;
+		for (long date : series.getDates()){
+			i++;
+			
+			if (date > start && date < end){
+				dates.add(date);
+				values.add(series.getValues()[i]);
+			}			
+		}	
+		
+		dates.trimToSize();
+		values.trimToSize();
+		
+		return new TimeSeries(series.getSymbol(), dates.elements(), values.elements());
+	}
+	
 	static public Long[] concat(long[] a, long[] b) {
 		int aLen = a.length;
 		int bLen = b.length;

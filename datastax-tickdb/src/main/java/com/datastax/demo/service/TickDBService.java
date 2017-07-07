@@ -75,6 +75,7 @@ public class TickDBService {
 			}
 			
 			result = TimeSeriesUtils.mergeTimeSeries(result, timeSeries);
+			result = TimeSeriesUtils.filter(result, fromDate.getMillis(), toDate.getMillis());
 		}
 		timer.end();
 		logger.info("Request took " + timer.getTimeTakenMillis() + " over a total of " + result.getDates().length + " ticks");

@@ -47,15 +47,41 @@ To create the a single node cluster with replication factor of 1 for standard lo
 
     mvn clean compile exec:java -Dexec.mainClass="com.datastax.demo.SchemaSetup"
 
+
+###For Tick
+
 To run the insert of historic data, run (change noOfDays to the number of historic days you require.)
 
     mvn clean compile exec:java -Dexec.mainClass="com.datastax.tickdata.Main" (-DcontactPoints=<node0> -DnoOfDays=30)
 
-This will create 2 threads, 1 for binary inserts and 1 for tickdata inserts.
 
 To read a ticker
 
 	  mvn clean compile exec:java -Dexec.mainClass="com.datastax.tickdata.Read" (-Dsymbol=NASDAQ-AAPL-2015-09-16)
+
+
+###For Binary
+
+To run the insert of historic data, run (change noOfDays to the number of historic days you require.)
+
+    mvn clean compile exec:java -Dexec.mainClass="com.datastax.tickdata.MainBinary" (-DcontactPoints=<node0> -DnoOfDays=30)
+
+
+To read a ticker
+
+	  mvn clean compile exec:java -Dexec.mainClass="com.datastax.tickdata.ReadBinary" (-Dsymbol=NASDAQ-AAPL-2015-09-16)
+
+###For JSON
+
+To run the insert of historic data, run (change noOfDays to the number of historic days you require.)
+
+    mvn clean compile exec:java -Dexec.mainClass="com.datastax.tickdata.MainJson" (-DcontactPoints=<node0> -DnoOfDays=30)
+
+
+To read a ticker
+
+	  mvn clean compile exec:java -Dexec.mainClass="com.datastax.tickdata.ReadJson" (-Dsymbol=NASDAQ-AAPL-2015-09-16)
+
 
 
 Start the server by running the following from the base folder 

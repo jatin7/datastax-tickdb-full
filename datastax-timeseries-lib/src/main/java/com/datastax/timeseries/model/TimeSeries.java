@@ -13,6 +13,21 @@ public class TimeSeries {
 	private long[] dates;
 	private double[] values;
 	
+	public TimeSeries(){		
+	}
+	
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
+	}
+
+	public void setDates(long[] dates) {
+		this.dates = dates;
+	}
+
+	public void setValues(double[] values) {
+		this.values = values;
+	}
+
 	public TimeSeries(String symbol, long[] dates, double[] values) {
 		super();
 		this.symbol = symbol;
@@ -30,7 +45,7 @@ public class TimeSeries {
 
 	public double[] getValues() {
 		return values;
-	}
+	}	
 	
 	public void reverse(){
 		ArrayUtils.reverse(dates);

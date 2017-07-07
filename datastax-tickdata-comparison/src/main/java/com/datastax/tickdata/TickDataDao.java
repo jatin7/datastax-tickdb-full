@@ -71,7 +71,7 @@ public class TickDataDao {
 		this.selectRangeStmtTick.setConsistencyLevel(ConsistencyLevel.ONE);
 	}
 	
-	public TimeSeries getTickData(String symbol){
+	public TimeSeries getTimeSeries(String symbol){
 		
 		BoundStatement boundStmt = new BoundStatement(this.selectStmtTick);
 		boundStmt.setString(0, symbol);
