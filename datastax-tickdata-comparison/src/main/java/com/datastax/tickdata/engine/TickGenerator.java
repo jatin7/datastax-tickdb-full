@@ -35,6 +35,7 @@ public class TickGenerator implements Iterator<TimeSeries> {
 			return true;
 		}else{
 			logger.info("Comparing : " + this.startDateTime + " - " + new DateTime());
+			
 			if (this.startDateTime.getMillis() < new DateTime().getMillis()){
 				
 				startDateTime = startDateTime.plusDays(1);

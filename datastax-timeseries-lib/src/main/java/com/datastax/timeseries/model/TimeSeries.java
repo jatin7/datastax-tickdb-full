@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 
 import com.google.common.primitives.Longs;
 
-public class TimeSeries {
+public class TimeSeries implements java.io.Serializable {
 
 	private String symbol;
 	private long[] dates;

@@ -1,6 +1,8 @@
 package com.datastax.timeseries.utils;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.datastax.timeseries.model.TimeSeries;
 
@@ -9,6 +11,7 @@ import cern.colt.list.LongArrayList;
 
 public class TimeSeriesUtils {
 
+	private static Logger logger = LoggerFactory.getLogger(TimeSeriesUtils.class);
 	static public TimeSeries mergeTimeSeries(TimeSeries timeSeries1, TimeSeries timeSeries2) {
 						
 		if (timeSeries1 == null && timeSeries2 == null){
@@ -47,14 +50,16 @@ public class TimeSeriesUtils {
 		DoubleArrayList values = new DoubleArrayList();
 		LongArrayList dates = new LongArrayList();
 		
-		int i = 0;
-		for (long date : series.getDates()){
-			i++;
+		for (int i=0; i < series.getDates().length; i++){
 			
-			if (date > start && date < end){
+			long date = series.getDates()[i];
+			
+			
+			if (date < start && date < end){
 				dates.add(date);
 				values.add(series.getValues()[i]);
-			}			
+			}
+
 		}	
 		
 		dates.trimToSize();

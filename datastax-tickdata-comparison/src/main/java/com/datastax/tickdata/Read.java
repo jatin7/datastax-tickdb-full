@@ -3,6 +3,7 @@ package com.datastax.tickdata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.datastax.demo.utils.FileUtils;
 import com.datastax.demo.utils.PropertyHelper;
 import com.datastax.demo.utils.Timer;
 import com.datastax.timeseries.model.TimeSeries;
@@ -14,7 +15,7 @@ public class Read {
 	public Read() {
 
 		String contactPointsStr = PropertyHelper.getProperty("contactPoints", "localhost");
-		String symbol = PropertyHelper.getProperty("symbol", "NASDAQ-AAPL-2017-06-16");
+		String symbol = PropertyHelper.getProperty("symbol", "NASDAQ-AAPL-2019-01-01");
 		
 		TickDataDao dao = new TickDataDao(contactPointsStr.split(","));
 		TickDataJsonDao jsonDao = new TickDataJsonDao(contactPointsStr.split(","));
@@ -23,20 +24,24 @@ public class Read {
 		Timer timer = new Timer();		
 		TimeSeries timeSeries = binaryDao.getTimeSeries(symbol);			
 		timer.end();
-		logger.info("Data read took with binary " + timer.getTimeTakenMillis() + " ms. Total Points " + timeSeries.getDates().length);
+		logger.info("Data read took with binary " + timer.getTimeTakenMillis() + " ms. Total Points " + timeSeries.getDates().length + ". Object size : " + FileUtils.getObjectSize(timeSeries));
 		
 		timer = new Timer();		
 		TimeSeries tickData = dao.getTimeSeries(symbol);			
 		timer.end();
-		logger.info("Data read took with tick " + timer.getTimeTakenMillis() + " ms. Total Points " + tickData.getDates().length);
+		logger.info("Data read took with tick " + timer.getTimeTakenMillis() + " ms. Total Points " + tickData.getDates().length + ". Object size : " + FileUtils.getObjectSize(tickData));
 
 		timer = new Timer();
-		TimeSeries jsonData = jsonDao.getTimeSeries(symbol);		
+		TimeSeries jsonData = jsonDao.getTimeSeries(symbol);
+		
+		
 		timer.end();
-		logger.info("Data read took with json " + timer.getTimeTakenMillis() + " ms. Total Points " + jsonData.getDates().length);		
+		//logger.info("Data read took with json " + timer.getTimeTakenMillis() + " ms. Total Points " + jsonData.getDates().length + ". Object size : " + FileUtils.getObjectSize(jsonData));		
 		
 		System.exit(0);
 	}
+	
+	
 	
 	/**
 	 * @param args

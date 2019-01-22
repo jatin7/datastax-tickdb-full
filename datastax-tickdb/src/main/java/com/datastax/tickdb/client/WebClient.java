@@ -16,7 +16,7 @@ import com.datastax.demo.service.TickDBService;
 import com.datastax.timeseries.model.CandleStickSeries;
 import com.datastax.timeseries.model.Periodicity;
 import com.datastax.timeseries.model.TimeSeries;
-import com.datastax.timeseries.utils.PeriodicityProcessor;
+import com.datastax.timeseries.utils.FunctionProcessor;
 
 @Path("/tickdb/")
 public class WebClient {
@@ -62,7 +62,7 @@ public class WebClient {
 		timeSeries.reverse();
 		
 		if (periodicityString != null){
-			timeSeries = PeriodicityProcessor.getTimeSeriesByPeriod(timeSeries, Periodicity.valueOf(periodicityString), fromDate);
+			timeSeries = FunctionProcessor.getTimeSeriesByPeriod(timeSeries, Periodicity.valueOf(periodicityString), fromDate);
 		}
 		
 		return Response.status(201).entity(timeSeries).build();

@@ -51,7 +51,10 @@ public class PeriodicityProcessor {
 
 	public static List<Long> createDatesByPeriodicity(Periodicity periodicity, long startTime, TimeSeries timeSeries) {
 		
+		
 		long endTime = timeSeries.getDates()[timeSeries.getDates().length-1];
+		
+		logger.info("Start time " + new DateTime(startTime).toString() + " End Time : " + new DateTime(endTime).toString());
 		
 		List<Long> newDates = new ArrayList<Long>();
 		
@@ -63,16 +66,16 @@ public class PeriodicityProcessor {
 		while (startTime < endTime){
 			startTime = startTime + periodicity.getDuration().getMillis();			
 
-			if (startTime > timeSeries.getDates()[0]){
+			logger.info(startTime + "  " + endTime);
+			if (startTime < endTime){
 				newDates.add(startTime);
 			}
 		}
-		
+			
 		return newDates;
 	}
 	
-	
 	public static void main(String[] args){
 		
-	}
+ 	}
 }

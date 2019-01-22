@@ -7,6 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.joda.time.DateTime;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.datastax.demo.utils.PropertyHelper;
+
 import com.datastax.demo.utils.Timer;
 import com.datastax.tickdata.engine.TickGenerator;
 import com.datastax.tickdata.model.TickData;
@@ -49,10 +51,6 @@ public class Main {
 		Timer timer = new Timer();
 		timer.start();
 
-		for (int i = 0; i < noOfThreads; i++) {
-
-			executor.execute(new TimeSeriesTickWriter(dao, queue));
-		}
 
 		// Load the symbols
 		DataLoader dataLoader = new DataLoader();
@@ -62,6 +60,11 @@ public class Main {
 
 		// Start the tick generator
 		TickGenerator tickGenerator = new TickGenerator(exchangeSymbols, startTime);
+
+		for (int i = 0; i < noOfThreads; i++) {
+
+			executor.execute(new TimeSeriesTickWriter(dao, queue));
+		}
 
 		while (tickGenerator.hasNext()) {
 			TimeSeries next = tickGenerator.next();
@@ -74,13 +77,19 @@ public class Main {
 		}
 		timer.end();
 
+		try {
+			executor.awaitTermination(1, TimeUnit.DAYS);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		logger.info("Data Loading (" + decimalFormat.format(tickGenerator.getCount()) + " ticks) for tick took "
 				+ tickTotal.get() + "ms ("
 				+ decimalFormat.format(
 						new Double(tickGenerator.getCount() * 1000) / (new Double(tickTotal.get()).doubleValue()))
 				+ " a sec)");
 
-		System.exit(0);
 	}
 
 	class TimeSeriesTickWriter implements Runnable {
@@ -115,6 +124,7 @@ public class Main {
 						e.printStackTrace();
 					}
 				}
+				
 			}
 		}
 

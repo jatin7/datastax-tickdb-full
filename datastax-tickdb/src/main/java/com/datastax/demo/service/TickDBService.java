@@ -20,6 +20,7 @@ import com.datastax.timeseries.model.Periodicity;
 import com.datastax.timeseries.model.TimeSeries;
 import com.datastax.timeseries.utils.CandleStickProcessor;
 import com.datastax.timeseries.utils.DateUtils;
+import com.datastax.timeseries.utils.FunctionProcessor;
 import com.datastax.timeseries.utils.TimeSeriesUtils;
 
 public class TickDBService {
@@ -38,19 +39,6 @@ public class TickDBService {
 		tickDataDao = new TickDataDao(PropertyHelper.getProperty("contactPoints", "localhost").split(","));
 		tickDataBinaryDao = new TickDataBinaryDao(PropertyHelper.getProperty("contactPoints", "localhost").split(","));
 	}
-	
-	public void convertTickDataToTimeSeries(String exchange, String symbol, DateTime date){
-		TimeSeries timeSeries = tickDataDao.getTickData(exchange + "-" + symbol, date.withMillisOfDay(0).getMillis(), date.getMillis());
-
-		try {
-			if (timeSeries!=null){
-				tickDataBinaryDao.insertTimeSeries(timeSeries);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	
 	public TimeSeries getTimeSeries(String exchange, String symbol, DateTime fromDate, DateTime toDate) {
 		TimeSeries result = null;
@@ -75,12 +63,26 @@ public class TickDBService {
 			}
 			
 			result = TimeSeriesUtils.mergeTimeSeries(result, timeSeries);
-			result = TimeSeriesUtils.filter(result, fromDate.getMillis(), toDate.getMillis());
+			
+			logger.info(fromDate.toDate().toString() + " " + toDate.toDate().toString());
+			//result = TimeSeriesUtils.filter(result, fromDate.getMillis(), toDate.getMillis());
 		}
 		timer.end();
-		logger.info("Request took " + timer.getTimeTakenMillis() + " over a total of " + result.getDates().length + " ticks");
+		logger.info("Request took " + timer.getTimeTakenMillis() + "ms over a total of " + result.getDates().length + " ticks");
 		
 		return result;
+	}
+	
+	public void convertTickDataToTimeSeries(String exchange, String symbol, DateTime date){
+		TimeSeries timeSeries = tickDataDao.getTickData(exchange + "-" + symbol, date.withMillisOfDay(0).getMillis(), date.getMillis());
+
+		try {
+			if (timeSeries!=null){
+				tickDataBinaryDao.insertTimeSeries(timeSeries);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -161,7 +163,7 @@ public class TickDBService {
 		DateTime time = new DateTime();		
 		
 		Timer t = new Timer();
-		TimeSeries result = service.getTimeSeries("NASDAQ", "AAPL", time.minusDays(30), time);
+		TimeSeries result = service.getTimeSeries("NASDAQ", "AAPL", time.minusDays(10), time);
 		logger.info(new DateTime(result.lowestDate()).toString());
 		logger.info(new DateTime(result.highestDate()).toString());		
 		t.end();		
@@ -174,6 +176,12 @@ public class TickDBService {
 		
 		logger.info(candles.getCandleSticks().toString());
 
+		
+		TimeSeries s1 = service.getTimeSeries("NASDAQ", "AAPL", time.minusDays(5), time);
+		s1.reverse();
+		TimeSeries timeSeriesByPeriod = FunctionProcessor.getTimeSeriesByPeriod(s1, Periodicity.HOUR, time.minusDays(5));
+		logger.info(timeSeriesByPeriod.toString());
+		
 		System.exit(0);
 	}
 }
