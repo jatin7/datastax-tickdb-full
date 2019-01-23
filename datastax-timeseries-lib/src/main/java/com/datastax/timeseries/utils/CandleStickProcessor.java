@@ -85,7 +85,14 @@ public class CandleStickProcessor {
 
 		double low = doubles.get(0);
 		double high = doubles.get(doubles.size() - 1);
+		
+		double sum = 0;
+		
+		for (int i=0; i<doubles.size(); i++){
+			sum+=doubles.get(i);
+		}
+		double avg = sum/doubles.size();
 
-		return new CandleStick(high, low, open, close);
+		return new CandleStick(high, low, open, close, avg, sum);
 	}
 }
