@@ -149,7 +149,14 @@ public class TickDataDao {
 
 			results.add(session.executeAsync(boundStmt));
 						
-			TOTAL_POINTS.incrementAndGet();			
+			TOTAL_POINTS.incrementAndGet();		
+			
+			if (results.size() > 100){
+				for (ResultSetFuture future : results) {
+					future.getUninterruptibly();
+				}
+				results.clear();
+			}
 		}
 				
 		for (ResultSetFuture future : results) {
