@@ -77,10 +77,9 @@ public class Main {
 		}
 		timer.end();
 
-		try {
-			executor.awaitTermination(1, TimeUnit.DAYS);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		
+		while (!queue.isEmpty()){
+			sleep(10);
 		}
 		
 		logger.info("Data Loading (" + decimalFormat.format(tickGenerator.getCount()) + " ticks) for tick took "
@@ -89,6 +88,7 @@ public class Main {
 						new Double(tickGenerator.getCount() * 1000) / (new Double(tickTotal.get()).doubleValue()))
 				+ " a sec)");
 
+		System.exit(0);
 	}
 
 	class TimeSeriesTickWriter implements Runnable {
@@ -145,6 +145,14 @@ public class Main {
 		}
 	}
 
+	private void sleep(int seconds) {
+		try {
+			Thread.sleep(seconds * 1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * @param args
 	 */

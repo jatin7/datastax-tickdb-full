@@ -42,7 +42,7 @@ public class MainBinary {
 
 		int noOfThreads = Integer.parseInt(noOfThreadsStr);
 		// Create shared queue
-		BlockingQueue<TimeSeries> binaryQueue = new ArrayBlockingQueue<TimeSeries>(100);
+		BlockingQueue<TimeSeries> binaryQueue = new ArrayBlockingQueue<TimeSeries>(2);
 
 		// Executor for Threads
 		ExecutorService binaryExecutor = Executors.newFixedThreadPool(noOfThreads);
@@ -74,11 +74,16 @@ public class MainBinary {
 		}
 		timer.end();
 
+		
+		while (!binaryQueue.isEmpty()){
+			sleep(10);
+		}
 		logger.info("Data Loading (" + decimalFormat.format(tickGenerator.getCount()) + " ticks) for binary took "
 				+ binaryTotal.get() + "ms ("
 				+ decimalFormat.format(
 						new Double(tickGenerator.getCount() * 1000) / (new Double(binaryTotal.get()).doubleValue()))
 				+ " a sec)");
+
 		System.exit(0);
 	}
 
