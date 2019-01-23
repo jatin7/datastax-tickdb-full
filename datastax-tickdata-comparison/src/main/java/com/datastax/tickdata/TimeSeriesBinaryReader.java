@@ -22,7 +22,7 @@ public class TimeSeriesBinaryReader implements Future<TimeSeries> {
 		t = new Thread(new Runnable(){
 			@Override
 			public void run() {
-				logger.debug("Getting date from Binary store");
+				logger.info("Getting date from Binary store");
 				timeSeries = binaryDao.getTimeSeries(key);
 				finished = true;
 			}				

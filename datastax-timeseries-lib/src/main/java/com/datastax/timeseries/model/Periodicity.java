@@ -4,6 +4,10 @@ import org.joda.time.Duration;
 
 public enum Periodicity {	
 	
+	SECOND (new Duration(1*1000)),
+	SECOND_2 (new Duration(2*1000)),
+	SECOND_10 (new Duration(10*1000)),
+	SECOND_30 (new Duration(30*1000)),
 	MINUTE (new Duration(60*1000)),
 	MINUTE_5 (new Duration(5*60*1000)),
 	MINUTE_15 (new Duration(15*60*1000)),
