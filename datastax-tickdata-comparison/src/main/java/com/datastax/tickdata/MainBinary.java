@@ -31,7 +31,7 @@ public class MainBinary {
 
 		String contactPointsStr = PropertyHelper.getProperty("contactPoints", "localhost");
 		String noOfThreadsStr = PropertyHelper.getProperty("noOfThreads", "1");
-		String noOfDaysStr = PropertyHelper.getProperty("noOfDays", "2");
+		String noOfDaysStr = PropertyHelper.getProperty("noOfDays", "50");
 
 		int noOfDays = Integer.parseInt(noOfDaysStr);
 		DateTime startTime = new DateTime().minusDays(noOfDays - 1);
