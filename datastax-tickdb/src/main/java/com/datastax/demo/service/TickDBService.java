@@ -60,6 +60,7 @@ public class TickDBService {
 			endOfMonth = endOfMonth.withTimeAtStartOfDay().withMonthOfYear(endOfMonth.plusMonths(1).getMonthOfYear()).withDayOfMonth(1);
 			
 			logger.info(endOfMonth.toDate().toString());
+			
 			TimeSeries timeSeries;
 			if (toDate.isBefore(endOfMonth)){
 				timeSeries = getTimeSeriesByMonth(exchange, symbol, fromDate, toDate);
@@ -70,8 +71,7 @@ public class TickDBService {
 			
 			result = TimeSeriesUtils.mergeTimeSeries(result, timeSeries);
 			
-			logger.info(fromDate.toDate().toString() + " " + toDate.toDate().toString());
-			//result = TimeSeriesUtils.filter(result, fromDate.getMillis(), toDate.getMillis());
+			logger.info("Size - " + result.getDates().length + " " + fromDate.toDate().toString() + " " + toDate.toDate().toString());
 		}
 		timer.end();
 		logger.info("Request took " + timer.getTimeTakenMillis() + "ms over a total of " + result.getDates().length + " ticks");
@@ -170,7 +170,7 @@ public class TickDBService {
 		DateTime time = new DateTime();		
 		
 		Timer t = new Timer();
-		TimeSeries result = service.getTimeSeries("NASDAQ", "AAPL", time.minusDays(10), time);
+		TimeSeries result = service.getTimeSeries("NASDAQ", "AAPL", time.minusDays(25), time);
 		logger.info(new DateTime(result.lowestDate()).toString());
 		logger.info(new DateTime(result.highestDate()).toString());		
 		t.end();		

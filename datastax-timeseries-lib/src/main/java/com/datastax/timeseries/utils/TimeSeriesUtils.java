@@ -12,6 +12,7 @@ import cern.colt.list.LongArrayList;
 public class TimeSeriesUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(TimeSeriesUtils.class);
+	
 	static public TimeSeries mergeTimeSeries(TimeSeries timeSeries1, TimeSeries timeSeries2) {
 						
 		if (timeSeries1 == null && timeSeries2 == null){
