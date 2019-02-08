@@ -48,7 +48,7 @@ To create the a single node cluster with replication factor of 1 for standard lo
     mvn clean compile exec:java -Dexec.mainClass="com.datastax.demo.SchemaSetup"
 
 
-###For Tick
+### For Tick
 
 To run the insert of historic data, run (change noOfDays to the number of historic days you require.)
 
@@ -60,7 +60,7 @@ To read a ticker
 	  mvn clean compile exec:java -Dexec.mainClass="com.datastax.tickdata.Read" (-Dsymbol=NASDAQ-AAPL-2015-09-16)
 
 
-###For Binary
+### For Binary
 
 To run the insert of historic data, run (change noOfDays to the number of historic days you require.)
 
@@ -71,7 +71,7 @@ To read a ticker
 
 	  mvn clean compile exec:java -Dexec.mainClass="com.datastax.tickdata.ReadBinary" (-Dsymbol=NASDAQ-AAPL-2015-09-16)
 
-###For JSON
+### For JSON
 
 To run the insert of historic data, run (change noOfDays to the number of historic days you require.)
 
@@ -88,7 +88,7 @@ Start the server by running the following from the base folder
 
   ./run_server.sh
 
-###Querying.
+### Querying.
 
 Todays data
 
@@ -106,7 +106,7 @@ To and from dates broken into minute chunks and shown as candlesticks
 
     http://localhost:7001/datastax-tickdb/rest/tickdb/get/candlesticks/NASDAQ/AAPL/20150914000000/20150917000000/MINUTE_5
 
-###Services
+### Services
 
 For all exchanges and symbols, run daily conversion of tick data to binary data for long term storage and retrieval
 
@@ -121,7 +121,7 @@ For a specific symbol and date, run daily conversion of tick data to binary data
     http://localhost:7001/datastax-tickdb/rest/tickdb/get/rundailyconversionbysymbolanddate/NASDAQ/AAPL/20150917000000
 
 
-###Notes
+### Notes
 Dates are in format - yyyyMMddHHmmss
 
 Periodicity's are
